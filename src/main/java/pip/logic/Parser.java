@@ -2,7 +2,18 @@ package pip.logic;
 
 import pip.app.PipException;
 
+/**
+ * Parses raw user input into executable Command objects.
+ * Throws PipException for empty input or unknown commands.
+ */
 public class Parser {
+    /**
+     * Parses a raw command line into a concrete Command.
+     *
+     * @param fullCommand Raw line from the user.
+     * @return Executable command corresponding to the input.
+     * @throws PipException If the input is empty or the command is unknown.
+     */
     public static Command parse(String fullCommand) throws PipException {
         String trimmed = fullCommand == null ? "" : fullCommand.trim();
         if (trimmed.isEmpty()) throw new PipException("Please type a command!");

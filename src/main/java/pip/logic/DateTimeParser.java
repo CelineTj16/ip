@@ -10,7 +10,18 @@ import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.util.Locale;
 
+/**
+ * Utility for parsing and formatting date/time values used by Pip.
+ * Accepts multiple human-friendly input formats and produces consistent display strings.
+ */
 public class DateTimeParser {
+    /**
+     * Parses a variety of date/time strings into a LocalDateTime.
+     *
+     * @param s Input string to parse (leading/trailing spaces allowed).
+     * @return Parsed date-time.
+     * @throws PipException If the input does not match any supported format.
+     */
     public static LocalDateTime parseDateTimeFlexible(String s) throws PipException {
         String input = s.trim();
 
@@ -47,6 +58,14 @@ public class DateTimeParser {
         throw new PipException("Invalid date/time. Examples: 2019-12-02, 2/12/2019 1800, 2/12/2019 6:15pm, 2019-12-02T18:00");
     }
 
+    /**
+     * Formats a LocalDateTime for compact, friendly display.
+     * If the time portion is midnight, returns {@code "MMM d yyyy"}.
+     * Otherwise, returns {@code "MMM d yyyy, h:mm a"}.
+     *
+     * @param dt Date-time to format.
+     * @return Human-friendly string for UI.
+     */
     public static String formatDateTimeSmart(LocalDateTime dt) {
         if (dt.toLocalTime().equals(LocalTime.MIDNIGHT)) {
             return dt.format(DateTimeFormatter.ofPattern("MMM d yyyy"));
