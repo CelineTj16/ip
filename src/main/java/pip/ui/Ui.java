@@ -7,14 +7,10 @@ package pip.ui;
 public class Ui {
     private static final String LINE = "    ____________________________________________________________";
 
-    /**
-     * Prints a horizontal divider line.
-     */
+    /** Prints a horizontal divider line. */
     public void showLine() { System.out.println(LINE); }
 
-    /**
-     * Prints the welcome banner surrounded by divider lines.
-     */
+    /** Prints the welcome banner surrounded by divider lines. */
     public void showWelcome() {
         showLine();
         System.out.println("     Hi! I'm Pip :))");
@@ -46,9 +42,7 @@ public class Ui {
      */
     public void showError(String msg) { System.out.println("     " + msg); }
 
-    /**
-     * Prints a non-fatal loading warning and continues with an empty task list.
-     */
+    /** Prints a non-fatal loading warning and continues with an empty task list. */
     public void showLoadingError() {
         System.out.println("     Warning: could not load save file. Starting with an empty list.");
     }

@@ -3,15 +3,11 @@ package pip.model;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Mutable container for {@link Task} objects with convenience render methods.
- */
+/** Mutable container for {@link Task} objects with convenience render methods. */
 public class TaskList {
     private final ArrayList<Task> tasks;
 
-    /**
-     * Constructs an empty {@code TaskList}.
-     */
+    /** Constructs an empty {@code TaskList}. */
     public TaskList() {
         this.tasks = new ArrayList<>();
     }

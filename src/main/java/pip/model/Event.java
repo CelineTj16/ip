@@ -1,8 +1,6 @@
 package pip.model;
 
-/**
- * Task that spans a time interval (start to end).
- */
+/** Task that spans a time interval (start to end). */
 public class Event extends Task {
     protected String from, to;
 

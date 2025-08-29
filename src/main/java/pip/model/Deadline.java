@@ -4,9 +4,7 @@ import pip.logic.DateTimeParser;
 
 import java.time.LocalDateTime;
 
-/**
- * Task that must be completed by a specific date/time.
- */
+/** Task that must be completed by a specific date/time. */
 public class Deadline extends Task {
     protected LocalDateTime by;
 

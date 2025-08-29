@@ -8,9 +8,7 @@ import pip.ui.Ui;
 
 import java.util.Scanner;
 
-/**
- * Entry point for the Pip CLI task manager.
- */
+/** Entry point for the Pip CLI task manager. */
 public class Pip {
     private final Storage storage;
     private TaskList tasks;

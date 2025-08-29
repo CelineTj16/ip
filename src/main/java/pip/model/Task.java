@@ -30,16 +30,12 @@ public abstract class Task {
             return isDone ? "X" : " ";
         }
 
-        /**
-         * Marks this task as completed.
-         */
+        /** Marks this task as completed. */
         public void mark() {
             isDone = true;
         }
 
-        /**
-         * Marks this task as uncompleted.
-         */
+        /** Marks this task as uncompleted. */
         public void unmark() {
             isDone = false;
         }

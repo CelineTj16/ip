@@ -11,9 +11,7 @@ import pip.model.Event;
 
 import java.time.LocalDateTime;
 
-/**
- * Base type for all executable commands in Pip.
- */
+/** Base type for all executable commands in Pip. */
 public abstract class Command {
     /**
      * Executes the command against the given model, UI, and storage.
@@ -32,9 +30,7 @@ public abstract class Command {
      */
     public boolean isExit() { return false; }
 
-    /**
-     * Command that adds a new Todo task to the list.
-     */
+    /** Command that adds a new Todo task to the list. */
     public static class AddTodo extends Command {
         private final String args;
 
@@ -115,9 +111,7 @@ public abstract class Command {
         }
     }
 
-    /**
-     * Command that deletes the task at a user-specified 1-based index.
-     */
+    /** Command that deletes the task at a user-specified 1-based index. */
     public static class Delete extends Command {
         private final String args;
 
@@ -138,9 +132,7 @@ public abstract class Command {
         }
     }
 
-    /**
-     * Command that marks the task at a user-specified 1-based index as done.
-     */
+    /** Command that marks the task at a user-specified 1-based index as done. */
     public static class Mark extends Command {
         private final String args;
 
@@ -159,9 +151,7 @@ public abstract class Command {
         }
     }
 
-    /**
-     * Command that marks the task at a user-specified 1-based index as not done.
-     */
+    /** Command that marks the task at a user-specified 1-based index as not done. */
     public static class Unmark extends Command {
         private final String args;
 
@@ -180,18 +170,14 @@ public abstract class Command {
         }
     }
 
-    /**
-     * Command that lists all tasks in the current task list.
-     */
+    /** Command that lists all tasks in the current task list. */
     public static class List extends Command {
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) {
             ui.show(tasks.render());
         }
     }
 
-    /**
-     * Command that exits the application.
-     */
+    /** Command that exits the application. */
     public static class Exit extends Command {
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) {
             ui.show("Bye. Hope to see you again soon!");
