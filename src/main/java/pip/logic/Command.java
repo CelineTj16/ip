@@ -119,4 +119,47 @@ public abstract class Command {
         }
         @Override public boolean isExit() { return true; }
     }
+
+    /**
+     * Command that finds tasks whose description contains a keyword (case-insensitive).
+     */
+    public static class Find extends Command {
+        private final String keyword;
+
+        /**
+         * Constructs a Find command.
+         *
+         * @param args Raw keyword text.
+         */
+        public Find(String args) {
+            this.keyword = args == null ? "" : args.trim();
+        }
+
+        @Override
+        public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
+            if (keyword.isEmpty()) {
+                throw new PipException("Usage: find <keyword>");
+            }
+
+            String kw = keyword.toLowerCase();
+            var all = tasks.asList();
+
+            StringBuilder sb = new StringBuilder("Here are the matching tasks in your list:\n");
+            int count = 0;
+            for (int i = 0; i < all.size(); i++) {
+                Task t = all.get(i);
+                if (t.getDescription().toLowerCase().contains(kw)) {
+                    count++;
+                    sb.append(count).append(". ").append(t).append("\n");
+                }
+            }
+
+            if (count == 0) {
+                ui.show("No matching tasks found for: " + keyword);
+            } else {
+                ui.show(sb.toString().trim());
+            }
+        }
+    }
+
 }

@@ -20,6 +20,7 @@ public class Parser {
             case "todo"     -> new Command.AddTodo(args);
             case "deadline" -> new Command.AddDeadline(args);
             case "event"    -> new Command.AddEvent(args);
+            case "find"     -> new Command.Find(args);
             default         -> throw new PipException("I'm not sure what that means. Sorry!");
         };
     }

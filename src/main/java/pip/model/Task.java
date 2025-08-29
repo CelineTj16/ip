@@ -38,6 +38,15 @@ public abstract class Task {
         return s.replace("¦", "|");
     }
 
+    /**
+     * Returns the user-visible description of this task.
+     *
+     * @return Description text.
+     */
+    public String getDescription() {
+        return description;
+    }
+
     /** Parse a saved line into a concrete Task. */
     public static Task fromDataString(String line) throws PipException {
         String[] parts = line.split("\\s*\\|\\s*");
