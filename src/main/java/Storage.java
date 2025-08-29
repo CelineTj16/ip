@@ -5,52 +5,48 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Storage {
-    private static final Path DATA_DIR = Paths.get("data");
-    private static final Path DATA_FILE = DATA_DIR.resolve("pip.txt");
+    private final Path dataDir;
+    private final Path dataFile;
 
-    public static void load(ArrayList<Task> out) {
+    public Storage(String filePath) {
+        this.dataFile = Paths.get(filePath);
+        this.dataDir = dataFile.getParent() != null ? dataFile.getParent() : Paths.get(".");
+    }
+
+    public List<Task> load() throws PipException {
+        List<Task> out = new ArrayList<>();
         try {
-            if (Files.notExists(DATA_DIR)) {
-                Files.createDirectories(DATA_DIR);
+            if (Files.notExists(dataDir)) Files.createDirectories(dataDir);
+            if (Files.notExists(dataFile)) {
+                Files.createFile(dataFile);
+                return out; // nothing to load yet
             }
-            if (Files.notExists(DATA_FILE)) {
-                Files.createFile(DATA_FILE);
-                return; // nothing to load
-            }
-            List<String> lines = Files.readAllLines(DATA_FILE, StandardCharsets.UTF_8);
+            List<String> lines = Files.readAllLines(dataFile, StandardCharsets.UTF_8);
             for (String line : lines) {
                 String trimmed = line.trim();
                 if (trimmed.isEmpty()) continue;
-                try {
-                    Task t = Task.fromDataString(trimmed);
-                    out.add(t);
-                } catch (PipException parseErr) {
-                    Pip.chunk("Warning: skipped corrupted line in save file:\n  " + trimmed);
-                }
+                out.add(Task.fromDataString(trimmed));
             }
+            return out;
         } catch (IOException e) {
-            Pip.chunk("Warning: could not read save file. Continuing without loading.");
+            throw new PipException("Failed to read save file.");
         }
     }
 
-    public static void save(ArrayList<Task> items) {
+    public void save(List<Task> items) throws PipException {
         try {
-            if (Files.notExists(DATA_DIR)) {
-                Files.createDirectories(DATA_DIR);
-            }
+            if (Files.notExists(dataDir)) Files.createDirectories(dataDir);
             List<String> lines = new ArrayList<>();
-            for (Task t : items) {
-                lines.add(t.toDataString());
-            }
+            for (Task t : items) lines.add(t.toDataString());
             Files.write(
-                    DATA_FILE,
+                    dataFile,
                     lines,
                     StandardCharsets.UTF_8,
                     StandardOpenOption.TRUNCATE_EXISTING,
                     StandardOpenOption.CREATE
             );
         } catch (IOException e) {
-            Pip.chunk("Warning: could not save tasks to disk.");
+            throw new PipException("Failed to save tasks to disk.");
         }
     }
 }
