@@ -15,7 +15,7 @@ public class Pip {
 
     public Pip(String filePath) {
         this.ui = new Ui();
-        this.storage = new Storage(filePath);   // <— Storage becomes instance-based
+        this.storage = new Storage(filePath);
         try {
             this.tasks = new TaskList(storage.load());
         } catch (PipException e) {

@@ -14,8 +14,12 @@ public class DateTimeParser {
     public static LocalDateTime parseDateTimeFlexible(String s) throws PipException {
         String input = s.trim();
 
-        try { return LocalDateTime.parse(input); } catch (DateTimeParseException ignored) {}
-        try { return LocalDate.parse(input).atStartOfDay(); } catch (DateTimeParseException ignored) {}
+        try {
+            return LocalDateTime.parse(input);
+        } catch (DateTimeParseException ignored) {}
+        try {
+            return LocalDate.parse(input).atStartOfDay();
+        } catch (DateTimeParseException ignored) {}
 
         DateTimeFormatter[] candidates = new DateTimeFormatter[] {
                 builder("d/M/yyyy HHmm"),
@@ -31,7 +35,7 @@ public class DateTimeParser {
                 builder("d-M-yyyy"),
         };
 
-        for (DateTimeFormatter f : candidates) {
+        for (DateTimeFormatter f: candidates) {
             try {
                 String pat = f.toString();
                 boolean isSlashDate = pat.contains("d/M/yyyy");

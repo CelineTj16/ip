@@ -26,7 +26,9 @@ public class Parser {
 
     static int parseIndex(String s, int size) throws PipException {
         String t = s == null ? "" : s.trim();
-        if (t.isEmpty()) throw new PipException("Please provide a valid task number between 1 and " + size + ".");
+        if (t.isEmpty()) {
+            throw new PipException("Please provide a valid task number between 1 and " + size + ".");
+        }
         try {
             int idx = Integer.parseInt(t);
             if (idx < 1 || idx > size) throw new PipException("Please provide a valid task number between 1 and " + size + ".");
