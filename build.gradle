@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'application'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'checkstyle'
 }
 
 repositories {
@@ -9,6 +10,7 @@ repositories {
 }
 
 dependencies {
+    implementation group: 'com.joestelmach', name: 'natty', version: '0.13'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.10.0'
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.0'
 }
@@ -28,7 +30,7 @@ test {
 }
 
 application {
-    mainClass.set("seedu.duke.Duke")
+    mainClass.set("pip.app.Pip")
 }
 
 shadowJar {
@@ -38,4 +40,8 @@ shadowJar {
 
 run{
     standardInput = System.in
+    enableAssertions = true
 }
+
+
+
