@@ -15,8 +15,6 @@ public abstract class Command {
     public abstract void execute(TaskList tasks, Ui ui, Storage storage) throws PipException;
     public boolean isExit() { return false; }
 
-    // ---------------- Commands ----------------
-
     public static class AddTodo extends Command {
         private final String args;
         public AddTodo(String args) { this.args = args.trim(); }
