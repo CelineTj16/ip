@@ -9,15 +9,32 @@ import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * File-backed storage for loading and saving Pip tasks.
+ * Creates the data directory/file on demand and reads/writes lines in the
+ * pipe-delimited format produced by pip.model.Task#toDataString().
+ */
 public class Storage {
     private final Path dataDir;
     private final Path dataFile;
 
+    /**
+     * Constructs a Storage instance for the given file path.
+     *
+     * @param filePath Path to the persistent tasks file.
+     */
     public Storage(String filePath) {
         this.dataFile = Paths.get(filePath);
         this.dataDir = dataFile.getParent() != null ? dataFile.getParent() : Paths.get(".");
     }
 
+    /**
+     * Loads tasks from disk.
+     * If the directory/file does not exist, they are created and an empty list is returned.
+     *
+     * @return A list of deserialized tasks; empty if the file was newly created or empty.
+     * @throws PipException If the file cannot be read or a line is malformed.
+     */
     public List<Task> load() throws PipException {
         List<Task> out = new ArrayList<>();
         try {
@@ -38,6 +55,12 @@ public class Storage {
         }
     }
 
+    /**
+     * Saves the given tasks to disk, replacing the existing contents.
+     *
+     * @param items Tasks to persist, in the same order they should appear in the file.
+     * @throws PipException If writing fails for any reason.
+     */
     public void save(List<Task> items) throws PipException {
         try {
             if (Files.notExists(dataDir)) Files.createDirectories(dataDir);

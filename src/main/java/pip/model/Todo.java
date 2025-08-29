@@ -1,6 +1,14 @@
 package pip.model;
 
+/**
+ * Basic task with a textual description and no date/time.
+ */
 public class Todo extends Task {
+    /**
+     * Constructs a Todo with the given description.
+     *
+     * @param description User-visible description of the task.
+     */
     public Todo(String description) {
         super(description);
     }

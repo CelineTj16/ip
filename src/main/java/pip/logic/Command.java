@@ -11,12 +11,38 @@ import pip.model.Event;
 
 import java.time.LocalDateTime;
 
+/**
+ * Base type for all executable commands in Pip.
+ */
 public abstract class Command {
+    /**
+     * Executes the command against the given model, UI, and storage.
+     *
+     * @param tasks   Current task list to read/mutate.
+     * @param ui      UI for user-visible output.
+     * @param storage Storage for persistence.
+     * @throws PipException If execution cannot proceed (e.g., invalid input).
+     */
     public abstract void execute(TaskList tasks, Ui ui, Storage storage) throws PipException;
+
+    /**
+     * Returns whether the application should exit after this command completes.
+     *
+     * @return true if the REPL should terminate; false otherwise.
+     */
     public boolean isExit() { return false; }
 
+    /**
+     * Command that adds a new Todo task to the list.
+     */
     public static class AddTodo extends Command {
         private final String args;
+
+        /**
+         * Constructs an AddTodo command with raw description arguments.
+         *
+         * @param args Raw description text (leading/trailing spaces allowed).
+         */
         public AddTodo(String args) { this.args = args.trim(); }
 
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
@@ -29,8 +55,18 @@ public abstract class Command {
         }
     }
 
+    /**
+     * Command that adds a new Deadline parsed from
+     * <desc> /by <time> (supports multiple date/time formats).
+     */
     public static class AddDeadline extends Command {
         private final String args;
+
+        /**
+         * Constructs an AddDeadline command with raw argument text.
+         *
+         * @param args Raw text containing description and /by time.
+         */
         public AddDeadline(String args) { this.args = args.trim(); }
 
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
@@ -48,8 +84,18 @@ public abstract class Command {
         }
     }
 
+    /**
+     * Command that adds a new Event parsed from
+     * <desc> /from <start> /to <end>.
+     */
     public static class AddEvent extends Command {
         private final String args;
+
+        /**
+         * Constructs an AddEvent command with raw argument text.
+         *
+         * @param args Raw text containing description, /from, and /to parts.
+         */
         public AddEvent(String args) { this.args = args.trim(); }
 
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
@@ -69,8 +115,17 @@ public abstract class Command {
         }
     }
 
+    /**
+     * Command that deletes the task at a user-specified 1-based index.
+     */
     public static class Delete extends Command {
         private final String args;
+
+        /**
+         * Constructs a Delete command.
+         *
+         * @param args Raw index string provided by the user (1-based).
+         */
         public Delete(String args) { this.args = args; }
 
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
@@ -83,8 +138,17 @@ public abstract class Command {
         }
     }
 
+    /**
+     * Command that marks the task at a user-specified 1-based index as done.
+     */
     public static class Mark extends Command {
         private final String args;
+
+        /**
+         * Constructs a Mark command.
+         *
+         * @param args Raw index string provided by the user (1-based).
+         */
         public Mark(String args) { this.args = args; }
 
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
@@ -95,8 +159,17 @@ public abstract class Command {
         }
     }
 
+    /**
+     * Command that marks the task at a user-specified 1-based index as not done.
+     */
     public static class Unmark extends Command {
         private final String args;
+
+        /**
+         * Constructs an Unmark command.
+         *
+         * @param args Raw index string provided by the user (1-based).
+         */
         public Unmark(String args) { this.args = args; }
 
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
@@ -107,12 +180,18 @@ public abstract class Command {
         }
     }
 
+    /**
+     * Command that lists all tasks in the current task list.
+     */
     public static class List extends Command {
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) {
             ui.show(tasks.render());
         }
     }
 
+    /**
+     * Command that exits the application.
+     */
     public static class Exit extends Command {
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) {
             ui.show("Bye. Hope to see you again soon!");

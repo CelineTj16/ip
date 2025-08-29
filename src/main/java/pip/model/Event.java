@@ -1,8 +1,18 @@
 package pip.model;
 
+/**
+ * Task that spans a time interval (start to end).
+ */
 public class Event extends Task {
     protected String from, to;
 
+    /**
+     * Constructs an Event with the given description and time range.
+     *
+     * @param description User-visible description.
+     * @param from        Start time text (unparsed).
+     * @param to          End time text (unparsed).
+     */
     public Event(String description, String from, String to) {
         super(description);
         this.from = from;
