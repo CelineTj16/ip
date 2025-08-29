@@ -28,7 +28,9 @@ public abstract class Command {
      *
      * @return true if the REPL should terminate; false otherwise.
      */
-    public boolean isExit() { return false; }
+    public boolean isExit() {
+        return false;
+    }
 
     /** Command that adds a new Todo task to the list. */
     public static class AddTodo extends Command {
@@ -39,13 +41,19 @@ public abstract class Command {
          *
          * @param args Raw description text (leading/trailing spaces allowed).
          */
-        public AddTodo(String args) { this.args = args.trim(); }
+        public AddTodo(String args) {
+            this.args = args.trim();
+        }
 
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
-            if (args.isEmpty()) throw new PipException("The description of a todo cannot be empty :((");
+            if (args.isEmpty()) {
+                throw new PipException("The description of a todo cannot be empty :((")
+            };
+
             Task t = new Todo(args);
             tasks.add(t);
             storage.save(tasks.asList());
+
             ui.show("Got it. I've added this task:\n  " + t
                     + "\nNow you have " + tasks.size() + " tasks in the list.");
         }
@@ -63,14 +71,22 @@ public abstract class Command {
          *
          * @param args Raw text containing description and /by time.
          */
-        public AddDeadline(String args) { this.args = args.trim(); }
+        public AddDeadline(String args) {
+            this.args = args.trim();
+        }
 
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
-            if (!args.contains("/by")) throw new PipException("Usage: deadline <desc> /by <time>");
+            if (!args.contains("/by")) {
+                throw new PipException("Usage: deadline <desc> /by <time>");
+            }
+
             String[] parts = args.split("/by", 2);
             String desc = parts[0].trim();
             String by = parts[1].trim();
-            if (desc.isEmpty() || by.isEmpty()) throw new PipException("Deadline description/time cannot be empty :((");
+
+            if (desc.isEmpty() || by.isEmpty()) {
+                throw new PipException("Deadline description/time cannot be empty :((");
+            }
             LocalDateTime dt = DateTimeParser.parseDateTimeFlexible(by);
             Task t = new Deadline(desc, dt);
             tasks.add(t);
@@ -92,17 +108,21 @@ public abstract class Command {
          *
          * @param args Raw text containing description, /from, and /to parts.
          */
-        public AddEvent(String args) { this.args = args.trim(); }
+        public AddEvent(String args) {
+            this.args = args.trim();
+        }
 
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
-            if (!args.contains("/from") || !args.contains("/to"))
+            if (!args.contains("/from") || !args.contains("/to")) {
                 throw new PipException("Usage: event <desc> /from <start> /to <end>");
+            }
             int pFrom = args.indexOf("/from"), pTo = args.indexOf("/to");
             String desc = args.substring(0, pFrom).trim();
             String from = args.substring(pFrom + 5, pTo).trim();
             String to   = args.substring(pTo + 3).trim();
-            if (desc.isEmpty() || from.isEmpty() || to.isEmpty())
+            if (desc.isEmpty() || from.isEmpty() || to.isEmpty()) {
                 throw new PipException("Event description/times cannot be empty :((");
+            }
             Task t = new Event(desc, from, to);
             tasks.add(t);
             storage.save(tasks.asList());
@@ -120,10 +140,14 @@ public abstract class Command {
          *
          * @param args Raw index string provided by the user (1-based).
          */
-        public Delete(String args) { this.args = args; }
+        public Delete(String args) {
+            this.args = args;
+        }
 
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
-            if (tasks.size() == 0) throw new PipException("Your list is empty! Add some tasks first :))");
+            if (tasks.size() == 0) {
+                throw new PipException("Your list is empty! Add some tasks first :))");
+            }
             int idx = Parser.parseIndex(args, tasks.size());
             Task removed = tasks.remove(idx);
             storage.save(tasks.asList());
@@ -141,7 +165,9 @@ public abstract class Command {
          *
          * @param args Raw index string provided by the user (1-based).
          */
-        public Mark(String args) { this.args = args; }
+        public Mark(String args) {
+            this.args = args;
+        }
 
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
             int idx = Parser.parseIndex(args, tasks.size());
@@ -160,7 +186,9 @@ public abstract class Command {
          *
          * @param args Raw index string provided by the user (1-based).
          */
-        public Unmark(String args) { this.args = args; }
+        public Unmark(String args) {
+            this.args = args;
+        }
 
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
             int idx = Parser.parseIndex(args, tasks.size());
@@ -182,6 +210,8 @@ public abstract class Command {
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) {
             ui.show("Bye. Hope to see you again soon!");
         }
-        @Override public boolean isExit() { return true; }
+        @Override public boolean isExit() {
+            return true;
+        }
     }
 }

@@ -8,7 +8,9 @@ public class Ui {
     private static final String LINE = "    ____________________________________________________________";
 
     /** Prints a horizontal divider line. */
-    public void showLine() { System.out.println(LINE); }
+    public void showLine() {
+        System.out.println(LINE);
+    }
 
     /** Prints the welcome banner surrounded by divider lines. */
     public void showWelcome() {
@@ -24,7 +26,9 @@ public class Ui {
      * @param sc Scanner bound to System.in.
      * @return The next line entered by the user (without the trailing newline).
      */
-    public String readCommand(java.util.Scanner sc) { return sc.nextLine(); }
+    public String readCommand(java.util.Scanner sc) {
+        return sc.nextLine();
+    }
 
     /**
      * Prints the given text, indenting each line consistently.
@@ -40,7 +44,9 @@ public class Ui {
      *
      * @param msg Error message to display.
      */
-    public void showError(String msg) { System.out.println("     " + msg); }
+    public void showError(String msg) {
+        System.out.println("     " + msg);
+    }
 
     /** Prints a non-fatal loading warning and continues with an empty task list. */
     public void showLoadingError() {
