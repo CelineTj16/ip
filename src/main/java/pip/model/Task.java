@@ -1,3 +1,8 @@
+package pip.model;
+
+import pip.app.PipException;
+import pip.logic.DateTimeParser;
+
 public abstract class Task {
     protected String description;
     protected boolean isDone;

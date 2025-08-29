@@ -1,3 +1,5 @@
+package pip.model;
+
 public class Event extends Task {
     protected String from, to;
 

@@ -1,3 +1,11 @@
+package pip.app;
+
+import pip.logic.Command;
+import pip.logic.Parser;
+import pip.model.TaskList;
+import pip.storage.Storage;
+import pip.ui.Ui;
+
 import java.util.Scanner;
 
 public class Pip {

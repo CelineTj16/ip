@@ -1,3 +1,8 @@
+package pip.storage;
+
+import pip.app.PipException;
+import pip.model.Task;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;

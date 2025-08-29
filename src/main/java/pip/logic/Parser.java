@@ -1,3 +1,7 @@
+package pip.logic;
+
+import pip.app.PipException;
+
 public class Parser {
     public static Command parse(String fullCommand) throws PipException {
         String trimmed = fullCommand == null ? "" : fullCommand.trim();
@@ -8,14 +12,14 @@ public class Parser {
         String args = parts.length > 1 ? parts[1] : "";
 
         return switch (cmd) {
-            case "bye"      -> new ExitCommand();
-            case "list"     -> new ListCommand();
-            case "mark"     -> new MarkCommand(args);
-            case "unmark"   -> new UnmarkCommand(args);
-            case "delete"   -> new DeleteCommand(args);
-            case "todo"     -> new AddTodoCommand(args);
-            case "deadline" -> new AddDeadlineCommand(args);
-            case "event"    -> new AddEventCommand(args);
+            case "bye"      -> new Command.Exit();
+            case "list"     -> new Command.List();
+            case "mark"     -> new Command.Mark(args);
+            case "unmark"   -> new Command.Unmark(args);
+            case "delete"   -> new Command.Delete(args);
+            case "todo"     -> new Command.AddTodo(args);
+            case "deadline" -> new Command.AddDeadline(args);
+            case "event"    -> new Command.AddEvent(args);
             default         -> throw new PipException("I'm not sure what that means. Sorry!");
         };
     }
