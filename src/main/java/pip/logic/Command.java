@@ -1,17 +1,17 @@
 package pip.logic;
 
-import pip.app.PipException;
-import pip.model.TaskList;
-import pip.storage.Storage;
-import pip.ui.Ui;
-import pip.model.Task;
-import pip.model.Todo;
-import pip.model.Deadline;
-import pip.model.Event;
-
 import java.time.LocalDateTime;
 
-/** Base type for all executable commands in Pip. */
+import pip.app.PipException;
+import pip.model.Deadline;
+import pip.model.Event;
+import pip.model.Task;
+import pip.model.TaskList;
+import pip.model.Todo;
+import pip.storage.Storage;
+import pip.ui.Ui;
+
+/** Base type for all executable commands in Pip.*/
 public abstract class Command {
     /**
      * Executes the command against the given model, UI, and storage.
@@ -47,8 +47,8 @@ public abstract class Command {
 
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
             if (args.isEmpty()) {
-                throw new PipException("The description of a todo cannot be empty :((")
-            };
+                throw new PipException("The description of a todo cannot be empty :((");
+            }
 
             Task t = new Todo(args);
             tasks.add(t);
@@ -61,7 +61,7 @@ public abstract class Command {
 
     /**
      * Command that adds a new Deadline parsed from
-     * <desc> /by <time> (supports multiple date/time formats).
+     * {@code <desc> /by <time>} (supports multiple date/time formats).
      */
     public static class AddDeadline extends Command {
         private final String args;
@@ -98,7 +98,7 @@ public abstract class Command {
 
     /**
      * Command that adds a new Event parsed from
-     * <desc> /from <start> /to <end>.
+     * {@code <desc> /from <start> /to <end>}.
      */
     public static class AddEvent extends Command {
         private final String args;
@@ -116,10 +116,11 @@ public abstract class Command {
             if (!args.contains("/from") || !args.contains("/to")) {
                 throw new PipException("Usage: event <desc> /from <start> /to <end>");
             }
-            int pFrom = args.indexOf("/from"), pTo = args.indexOf("/to");
+            int pFrom = args.indexOf("/from");
+            int pTo = args.indexOf("/to");
             String desc = args.substring(0, pFrom).trim();
             String from = args.substring(pFrom + 5, pTo).trim();
-            String to   = args.substring(pTo + 3).trim();
+            String to = args.substring(pTo + 3).trim();
             if (desc.isEmpty() || from.isEmpty() || to.isEmpty()) {
                 throw new PipException("Event description/times cannot be empty :((");
             }

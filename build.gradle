@@ -2,7 +2,11 @@ plugins {
     id 'java'
     id 'application'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
-//    id 'checkstyle'
+    id 'checkstyle'
+}
+
+checkstyle {
+    toolVersion = '11.0.0'
 }
 
 repositories {
@@ -57,7 +61,7 @@ shadowJar {
     archiveFileName = 'pip.jar'
 }
 
-run{
+run {
     standardInput = System.in
     enableAssertions = true
 }

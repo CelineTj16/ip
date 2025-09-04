@@ -1,12 +1,9 @@
 package pip;
 
-import pip.logic.Command;
-import org.junit.jupiter.api.*;
-import pip.app.PipException;
-import pip.model.Task;
-import pip.model.TaskList;
-import pip.storage.Storage;
-import pip.ui.Ui;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -14,16 +11,40 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import pip.app.PipException;
+import pip.logic.Command;
+import pip.model.Task;
+import pip.model.TaskList;
+import pip.storage.Storage;
+import pip.ui.Ui;
 
 class CommandTest {
 
     /** In-memory Storage double to avoid filesystem I/O. */
     static class FakeStorage extends Storage {
-        List<Task> lastSaved;
-        FakeStorage() { super("ignored"); }
-        @Override public List<Task> load() { return new ArrayList<>(); }
-        @Override public void save(List<Task> items) { lastSaved = new ArrayList<>(items); }
+        private List<Task> lastSaved;
+
+        FakeStorage() {
+            super("ignored");
+        }
+
+        @Override
+        public List<Task> load() {
+            return new ArrayList<>();
+        }
+
+        @Override
+        public void save(List<Task> items) {
+            this.lastSaved = new ArrayList<>(items);
+        }
+
+        List<Task> getLastSaved() {
+            return lastSaved;
+        }
     }
 
     private ByteArrayOutputStream out;
@@ -54,13 +75,13 @@ class CommandTest {
     }
 
     @Test
-    void addDeadline_parsesFormats_saves_andPrints() throws PipException {
-        new Command.AddDeadline("return book /by 2/12/2019 1800").execute(tasks, ui, storage);
+    void addDeadline_parsesFormatsAndSaves() throws PipException {
+        new Command.AddDeadline("return book /by 2/12/2019 1800")
+                .execute(tasks, ui, storage);
 
         assertEquals(1, tasks.size());
-        assertNotNull(storage.lastSaved);
-        assertEquals(1, storage.lastSaved.size());
-
+        assertNotNull(storage.getLastSaved());
+        assertEquals(1, storage.getLastSaved().size());
         assertTrue(tasks.get(0).toDataString().endsWith("2019-12-02T18:00"));
 
         String printed = grabOut();
@@ -69,21 +90,24 @@ class CommandTest {
     }
 
     @Test
-    void addTodo_empty_throws() {
-        PipException ex = assertThrows(PipException.class,
-                () -> new Command.AddTodo("   ").execute(tasks, ui, storage));
+    void addTodo_emptyThrows() {
+        PipException ex = assertThrows(
+                PipException.class, () -> new Command.AddTodo("   ").execute(tasks, ui, storage)
+        );
         assertEquals("The description of a todo cannot be empty :((", ex.getMessage());
     }
 
     @Test
-    void addEvent_missingFromOrTo_throws() {
-        PipException ex = assertThrows(PipException.class,
-                () -> new Command.AddEvent("camp only has from /from mon").execute(tasks, ui, storage));
+    void addEvent_missingFromOrToThrows() {
+        PipException ex = assertThrows(
+                PipException.class, () -> new Command.AddEvent("camp only has from /from mon")
+                        .execute(tasks, ui, storage)
+        );
         assertEquals("Usage: event <desc> /from <start> /to <end>", ex.getMessage());
     }
 
     @Test
-    void delete_validIndex_removes_andSaves() throws PipException {
+    void delete_validIndexRemovesAndSaves() throws PipException {
         new Command.AddTodo("a").execute(tasks, ui, storage);
         new Command.AddTodo("b").execute(tasks, ui, storage);
         grabOut();
@@ -91,28 +115,30 @@ class CommandTest {
         new Command.Delete("1").execute(tasks, ui, storage);
 
         assertEquals(1, tasks.size());
-        assertNotNull(storage.lastSaved);
-        assertEquals(1, storage.lastSaved.size());
+        assertNotNull(storage.getLastSaved());
+        assertEquals(1, storage.getLastSaved().size());
 
         String printed = grabOut();
         assertTrue(printed.contains("Noted. I've removed this task:"));
     }
 
     @Test
-    void mark_thenUnmark_toggles_andSaves() throws PipException {
+    void mark_thenUnmarkTogglesAndSaves() throws PipException {
         new Command.AddTodo("task").execute(tasks, ui, storage);
         grabOut();
 
         new Command.Mark("1").execute(tasks, ui, storage);
         assertEquals("X", tasks.get(0).getStatusIcon());
-        assertNotNull(storage.lastSaved);
+        assertNotNull(storage.getLastSaved());
 
         new Command.Unmark("1").execute(tasks, ui, storage);
         assertEquals(" ", tasks.get(0).getStatusIcon());
-        assertNotNull(storage.lastSaved);
+        assertNotNull(storage.getLastSaved());
 
         String printed = grabOut();
-        assertTrue(printed.contains("marked this task as done")
-                || printed.contains("marked this task as not done yet"));
+        assertTrue(
+                printed.contains("marked this task as done")
+                        || printed.contains("marked this task as not done yet")
+        );
     }
 }

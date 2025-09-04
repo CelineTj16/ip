@@ -1,8 +1,8 @@
 package pip.model;
 
-import pip.logic.DateTimeParser;
-
 import java.time.LocalDateTime;
+
+import pip.logic.DateTimeParser;
 
 /** Task that must be completed by a specific date/time. */
 public class Deadline extends Task {
