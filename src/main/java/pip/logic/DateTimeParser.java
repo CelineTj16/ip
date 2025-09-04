@@ -1,6 +1,5 @@
 package pip.logic;
 
-import pip.app.PipException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -9,6 +8,8 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.util.Locale;
+
+import pip.app.PipException;
 
 /**
  * Utility for parsing and formatting date/time values used by Pip.
@@ -22,15 +23,20 @@ public class DateTimeParser {
      * @return Parsed date-time.
      * @throws PipException If the input does not match any supported format.
      */
+    @SuppressWarnings("checkstyle:SeparatorWrap")
     public static LocalDateTime parseDateTimeFlexible(String s) throws PipException {
         String input = s.trim();
 
         try {
             return LocalDateTime.parse(input);
-        } catch (DateTimeParseException ignored) {}
+        } catch (DateTimeParseException ignored) {
+            // fall through to other formats
+        }
         try {
             return LocalDate.parse(input).atStartOfDay();
-        } catch (DateTimeParseException ignored) {}
+        } catch (DateTimeParseException ignored) {
+            // continue
+        }
 
         DateTimeFormatter[] candidates = new DateTimeFormatter[] {
                 builder("d/M/yyyy HHmm"),
@@ -50,16 +56,19 @@ public class DateTimeParser {
             try {
                 String pat = f.toString();
                 boolean isSlashDate = pat.contains("d/M/yyyy");
-                boolean isDashDate  = pat.contains("d-M-yyyy");
-                if ((isSlashDate && input.matches("\\d{1,2}/\\d{1,2}/\\d{4}$")) ||
-                        (isDashDate  && input.matches("\\d{1,2}-\\d{1,2}-\\d{4}$"))) {
+                boolean isDashDate = pat.contains("d-M-yyyy");
+                if ((isSlashDate && input.matches("\\d{1,2}/\\d{1,2}/\\d{4}$"))
+                        || (isDashDate && input.matches("\\d{1,2}-\\d{1,2}-\\d{4}$"))) {
                     return LocalDate.parse(input, f).atStartOfDay();
                 }
                 return LocalDateTime.parse(input, f);
-            } catch (DateTimeParseException ignored) {}
+            } catch (DateTimeParseException ignored) {
+                // try next formatter
+            }
         }
 
-        throw new PipException("Invalid date/time. Examples: 2019-12-02, 2/12/2019 1800, 2/12/2019 6:15pm, 2019-12-02T18:00");
+        throw new PipException("Invalid date/time. Examples: "
+                + "2019-12-02, 2/12/2019 1800, 2/12/2019 6:15pm, 2019-12-02T18:00");
     }
 
     /**

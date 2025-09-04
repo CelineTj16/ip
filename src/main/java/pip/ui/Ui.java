@@ -36,7 +36,9 @@ public class Ui {
      * @param text Text to print; may contain embedded newlines.
      */
     public void show(String text) {
-        for (String line : text.split("\n")) System.out.println("     " + line);
+        for (String line : text.split("\n")) {
+            System.out.println("     " + line);
+        }
     }
 
     /**

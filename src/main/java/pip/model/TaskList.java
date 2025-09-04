@@ -76,7 +76,9 @@ public class TaskList {
      * @return Rendered list, or a friendly message if empty.
      */
     public String render() {
-        if (tasks.isEmpty()) return "Your list is empty! Add some tasks first :))";
+        if (tasks.isEmpty()) {
+            return "Your list is empty! Add some tasks first :))";
+        }
         StringBuilder sb = new StringBuilder("Here are the tasks in your list:\n");
         for (int i = 0; i < tasks.size(); i++) {
             sb.append(i + 1).append(". ").append(tasks.get(i)).append("\n");

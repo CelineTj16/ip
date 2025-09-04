@@ -83,7 +83,9 @@ public abstract class Task {
         case "T": {
             String desc = unesc(parts[2]);
             Todo t = new Todo(desc);
-            if (done) t.mark();
+            if (done) {
+                t.mark();
+            }
             return t;
         }
         case "D": {
@@ -93,7 +95,9 @@ public abstract class Task {
             String desc = unesc(parts[2]);
             var dt = DateTimeParser.parseDateTimeFlexible(parts[3]);
             Deadline d = new Deadline(desc, dt);
-            if (done) d.mark();
+            if (done) {
+                d.mark();
+            }
             return d;
         }
         case "E": {
@@ -104,7 +108,9 @@ public abstract class Task {
             String from = unesc(parts[3]);
             String to = unesc(parts[4]);
             Event e = new Event(desc, from, to);
-            if (done) e.mark();
+            if (done) {
+                e.mark();
+            }
             return e;
         }
         default:

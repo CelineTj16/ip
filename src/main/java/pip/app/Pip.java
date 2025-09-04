@@ -1,14 +1,15 @@
 package pip.app;
 
+import java.util.Scanner;
+
 import pip.logic.Command;
 import pip.logic.Parser;
 import pip.model.TaskList;
 import pip.storage.Storage;
 import pip.ui.Ui;
 
-import java.util.Scanner;
 
-/** Entry point for the Pip CLI task manager. */
+/** Entry point for the Pip CLI task manager.*/
 public class Pip {
     private final Storage storage;
     private TaskList tasks;
@@ -53,6 +54,12 @@ public class Pip {
         sc.close();
     }
 
+    /**
+     * Entry point of the application.
+     * Initializes a Pip instance with the default storage file and runs it.
+     *
+     * @param args command-line arguments
+     */
     public static void main(String[] args) {
         new Pip("data/pip.txt").run();
     }
