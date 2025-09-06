@@ -49,7 +49,7 @@ test {
 }
 
 application {
-    mainClass.set("pip.app.Pip")
+    mainClass.set("pip.gui.Main")
 }
 tasks.named('jar') {
     manifest { attributes('Main-Class': application.mainClass.get()) }

@@ -1,0 +1,31 @@
+package pip.gui;
+
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
+
+public class Main extends Application {
+    private final Pip pip = new Pip("data/pip.txt");
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
+        AnchorPane ap = fxmlLoader.load();
+
+        MainWindow controller = fxmlLoader.getController();
+        controller.setPip(pip);
+
+        Scene scene = new Scene(ap);
+        stage.setScene(scene);
+        stage.setMinHeight(220);
+        stage.setMinWidth(417);
+        stage.setTitle("Pip");
+        stage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}

@@ -41,14 +41,12 @@ public class Pip {
         while (!isExit) {
             try {
                 String fullCommand = ui.readCommand(sc);
-                ui.showLine();
                 Command c = Parser.parse(fullCommand);
                 c.execute(tasks, ui, storage);
                 isExit = c.isExit();
             } catch (PipException e) {
                 ui.showError(e.getMessage());
             } finally {
-                ui.showLine();
             }
         }
         sc.close();
