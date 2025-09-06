@@ -6,6 +6,10 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+/**
+ * JavaFX entry point for the Pip application.
+ * </p>
+ */
 public class Main extends Application {
     private final Pip pip = new Pip("data/pip.txt");
 

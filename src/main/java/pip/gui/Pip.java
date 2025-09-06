@@ -14,7 +14,6 @@ import pip.ui.Ui;
 
 /**
  * GUI adapter for Pip: runs commands and returns the Ui output as text.
- * Not a JavaFX Application. No main() here.
  */
 public class Pip {
     private final Storage storage;
@@ -28,6 +27,7 @@ public class Pip {
         this("data/pip.txt");
     }
 
+    /** Bridges Pip's core logic to the JavaFX UI.*/
     public Pip(String filePath) {
         PrintStream capture = new PrintStream(buffer, true);
         this.ui = new Ui(capture);
