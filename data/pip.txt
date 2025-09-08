@@ -1,7 +1,2 @@
-T | 1 | sdjhk
-T | 0 | ksadhlsadh
-D | 0 | return book | 2019-12-02T18:00
-T | 1 | sadkgksad
-T | 0 | eat
-D | 0 | drink | 2019-12-02T09:00
-E | 1 | eat | mon | fri
+T | 1 | CS2103 assignments
+D | 0 | 2101 assignment | 2025-09-12T23:59
