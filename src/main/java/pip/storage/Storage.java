@@ -27,6 +27,8 @@ public class Storage {
      * @param filePath Path to the persistent tasks file.
      */
     public Storage(String filePath) {
+        assert filePath != null && !filePath.isBlank() : "filePath must be non-empty";
+
         this.dataFile = Paths.get(filePath);
         this.dataDir = dataFile.getParent() != null ? dataFile.getParent() : Paths.get(".");
     }
@@ -75,6 +77,7 @@ public class Storage {
             }
             List<String> lines = new ArrayList<>();
             for (Task t : items) {
+                assert t != null : "task must not be null";
                 lines.add(t.toDataString());
             }
             Files.write(

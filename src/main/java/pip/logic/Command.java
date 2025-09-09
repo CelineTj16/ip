@@ -46,6 +46,7 @@ public abstract class Command {
         }
 
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
+            assert tasks != null && ui != null && storage != null : "tasks, ui, and storage must be set";
             if (args.isEmpty()) {
                 throw new PipException("The description of a todo cannot be empty :((");
             }
@@ -76,6 +77,7 @@ public abstract class Command {
         }
 
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
+            assert tasks != null && ui != null && storage != null : "tasks, ui, and storage must be set";
             if (!args.contains("/by")) {
                 throw new PipException("Usage: deadline <desc> /by <time>");
             }
@@ -113,6 +115,7 @@ public abstract class Command {
         }
 
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
+            assert tasks != null && ui != null && storage != null : "tasks, ui, and storage must be set";
             if (!args.contains("/from") || !args.contains("/to")) {
                 throw new PipException("Usage: event <desc> /from <start> /to <end>");
             }
@@ -146,6 +149,7 @@ public abstract class Command {
         }
 
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
+            assert tasks != null && ui != null && storage != null : "tasks, ui, and storage must be set";
             if (tasks.size() == 0) {
                 throw new PipException("Your list is empty! Add some tasks first :))");
             }
@@ -171,6 +175,7 @@ public abstract class Command {
         }
 
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
+            assert tasks != null && ui != null && storage != null : "tasks, ui, and storage must be set";
             int idx = Parser.parseIndex(args, tasks.size());
             tasks.get(idx).mark();
             storage.save(tasks.asList());
@@ -192,6 +197,7 @@ public abstract class Command {
         }
 
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
+            assert tasks != null && ui != null && storage != null : "tasks, ui, and storage must be set";
             int idx = Parser.parseIndex(args, tasks.size());
             tasks.get(idx).unmark();
             storage.save(tasks.asList());

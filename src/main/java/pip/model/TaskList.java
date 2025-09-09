@@ -18,6 +18,7 @@ public class TaskList {
      * @param loaded Initial tasks to copy into this list.
      */
     public TaskList(List<Task> loaded) {
+        assert loaded != null : "loaded list must not be null";
         this.tasks = new ArrayList<>(loaded);
     }
 
@@ -35,9 +36,9 @@ public class TaskList {
      *
      * @param i Zero-based index.
      * @return Task at the index.
-     * @throws IndexOutOfBoundsException If i is out of range.
      */
     public Task get(int i) {
+        assert i >= 0 && i < tasks.size() : "index out of range";
         return tasks.get(i);
     }
 
@@ -47,6 +48,7 @@ public class TaskList {
      * @param t Task to add.
      */
     public void add(Task t) {
+        assert t != null : "task must not be null";
         tasks.add(t);
     }
 
@@ -55,9 +57,9 @@ public class TaskList {
      *
      * @param i Zero-based index to remove.
      * @return The removed task.
-     * @throws IndexOutOfBoundsException If i is out of range.
      */
     public Task remove(int i) {
+        assert i >= 0 && i < tasks.size() : "index out of range";
         return tasks.remove(i);
     }
 

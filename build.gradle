@@ -50,6 +50,7 @@ test {
 
 application {
     mainClass.set("pip.gui.Main")
+    applicationDefaultJvmArgs = ['-ea']
 }
 tasks.named('jar') {
     manifest { attributes('Main-Class': application.mainClass.get()) }

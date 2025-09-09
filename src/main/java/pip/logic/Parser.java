@@ -14,7 +14,6 @@ public class Parser {
      * @return Executable command corresponding to the input.
      * @throws PipException If the input is empty or the command is unknown.
      */
-    @SuppressWarnings("checkstyle:Indentation")
     public static Command parse(String fullCommand) throws PipException {
         String trimmed = fullCommand == null ? "" : fullCommand.trim();
         if (trimmed.isEmpty()) {
