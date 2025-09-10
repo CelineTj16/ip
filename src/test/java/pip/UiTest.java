@@ -1,5 +1,7 @@
 package pip;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
@@ -9,8 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import pip.ui.Ui;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UiTest {
 
@@ -27,7 +27,7 @@ class UiTest {
     }
 
     private String grab() {
-        String s = new String(out.toByteArray(), StandardCharsets.UTF_8);
+        String s = out.toString(StandardCharsets.UTF_8);
         out.reset();
         return s.replace("\r\n", "\n");
     }
@@ -47,7 +47,10 @@ class UiTest {
     @Test
     void show_printsEachLineWithIndent() {
         ui.show("hello\nworld");
-        String expected = "     hello\n" + "     world\n";
+        String expected = """
+                     hello
+                     world
+                """;
         assertEquals(expected, grab());
     }
 
