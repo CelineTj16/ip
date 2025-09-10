@@ -85,6 +85,7 @@ public abstract class Command {
         public AddTodo(String args) { this.desc = (args == null ? "" : args).trim(); }
 
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
+            assert tasks != null && ui != null && storage != null : "tasks, ui, and storage must be set";
             String d = requireNonEmpty(desc, MSG_EMPTY_TODO);
             addAndPersist(new Todo(d), tasks, storage, ui);
         }
@@ -99,6 +100,7 @@ public abstract class Command {
         public AddDeadline(String args) { this.raw = args == null ? "" : args.trim(); }
 
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
+            assert tasks != null && ui != null && storage != null : "tasks, ui, and storage must be set";
             if (!raw.contains(TOKEN_BY)) {
                 throw new PipException(MSG_USAGE_DEADLINE);
             }
@@ -121,6 +123,7 @@ public abstract class Command {
         public AddEvent(String args) { this.raw = args == null ? "" : args.trim(); }
 
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
+            assert tasks != null && ui != null && storage != null : "tasks, ui, and storage must be set";
             if (!raw.contains(TOKEN_FROM) || !raw.contains(TOKEN_TO)) {
                 throw new PipException(MSG_USAGE_EVENT);
             }
@@ -144,6 +147,7 @@ public abstract class Command {
         public Delete(String args) { this.args = args; }
 
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
+            assert tasks != null && ui != null && storage != null : "tasks, ui, and storage must be set";
             if (tasks.size() == 0) {
                 throw new PipException(MSG_EMPTY_LIST);
             }
@@ -161,6 +165,7 @@ public abstract class Command {
         public Mark(String args) { this.args = args; }
 
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
+            assert tasks != null && ui != null && storage != null : "tasks, ui, and storage must be set";
             int idx = Parser.parseIndex(args, tasks.size());
             Task t = tasks.get(idx);
             t.mark();
@@ -175,6 +180,7 @@ public abstract class Command {
         public Unmark(String args) { this.args = args; }
 
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
+            assert tasks != null && ui != null && storage != null : "tasks, ui, and storage must be set";
             int idx = Parser.parseIndex(args, tasks.size());
             Task t = tasks.get(idx);
             t.unmark();
