@@ -32,6 +32,6 @@ public class Deadline extends Task {
     @Override
     public String toDataString() {
         return String.format("%s | %d | %s | %s",
-                typeTag(), isDone ? 1 : 0, esc(description), by.toString());
+                typeTag(), doneFlag(), esc(description), by.toString());
     }
 }

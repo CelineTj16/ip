@@ -16,6 +16,7 @@ import pip.ui.Ui;
  * GUI adapter for Pip: runs commands and returns the Ui output as text.
  */
 public class Pip {
+    private static final String DEFAULT_SAVE_PATH = "data/pip.txt";
     private final Storage storage;
     private TaskList tasks;
     private final Ui ui;
@@ -24,14 +25,13 @@ public class Pip {
     private boolean exit = false;
 
     public Pip() {
-        this("data/pip.txt");
+        this(DEFAULT_SAVE_PATH);
     }
 
     /** Bridges Pip's core logic to the JavaFX UI.*/
     public Pip(String filePath) {
         PrintStream capture = new PrintStream(buffer, true);
         this.ui = new Ui(capture);
-
         this.storage = new Storage(filePath);
         try {
             this.tasks = new TaskList(storage.load());
