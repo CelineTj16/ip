@@ -42,6 +42,7 @@ public class Ui {
      * @return The next line entered by the user (without the trailing newline).
      */
     public String readCommand(Scanner sc) {
+        assert sc != null : "Scanner must not be null";
         return sc.nextLine();
     }
 
@@ -72,10 +73,5 @@ public class Ui {
     /** Prints a non-fatal loading warning and continues with an empty task list. */
     public void showLoadingError() {
         out.println(INDENT + "Warning: could not load save file. Starting with an empty list.");
-    }
-
-    /** Exposes an explicit flush hook (useful when capturing output). */
-    public void flush() {
-        out.flush();
     }
 }
