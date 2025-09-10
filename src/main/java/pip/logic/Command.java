@@ -234,7 +234,8 @@ public abstract class Command {
     }
 
     /**
-     * Command that finds tasks whose description contains a keyword (case-insensitive).
+     * Command that finds tasks even if the keyword matches the item only partially (case-insensitive)
+     * and has built-in typo tolerance (distance <= 1).
      */
     public static class Find extends Command {
         private final String keyword;
@@ -254,13 +255,14 @@ public abstract class Command {
                 throw new PipException("Usage: find <keyword>");
             }
 
-            String kw = keyword.toLowerCase();
+            String[] kw = keyword.toLowerCase().split("\\s+");
             var all = tasks.asList();
 
             StringBuilder sb = new StringBuilder("Here are the matching tasks in your list:\n");
             int count = 0;
             for (Task t : all) {
-                if (t.getDescription().toLowerCase().contains(kw)) {
+                String desc = t.getDescription().toLowerCase();
+                if (matchesAll(desc, kw)) {
                     count++;
                     sb.append(count).append(". ").append(t).append("\n");
                 }
@@ -271,6 +273,75 @@ public abstract class Command {
             } else {
                 ui.show(sb.toString().trim());
             }
+        }
+
+        private static boolean matchesAll(String desc, String[] terms) {
+            for (String term : terms) {
+                if (!matchesOne(desc, term)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private static boolean matchesOne(String desc, String term) {
+            if (term.isEmpty()) {
+                return true;
+            }
+            if (desc.contains(term)) {
+                return true;
+            }
+            return containsWithEditDistanceAtMostOne(desc, term);
+        }
+
+        private static boolean containsWithEditDistanceAtMostOne(String hay, String needle) {
+            int n = needle.length();
+            if (n == 0) {
+                return true;
+            }
+            if (hay.contains(needle)) {
+                return true;
+            }
+            if (n > hay.length() + 1) {
+                return false;
+            }
+            for (int i = 0; i <= hay.length() - Math.max(1, n - 1); i++) {
+                int end = Math.min(hay.length(), i + n + 1); // allow one extra char window
+                if (editDistanceAtMostOne(hay.substring(i, end), needle)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private static boolean editDistanceAtMostOne(String a, String b) {
+            int lengthFirst = a.length();
+            int lengthSecond = b.length();
+            if (Math.abs(lengthFirst - lengthSecond) > 1) {
+                return false;
+            }
+            int indexFirst = 0;
+            int indexSecond = 0;
+            int edits = 0;
+            while (indexFirst < lengthFirst && indexSecond < lengthSecond) {
+                if (a.charAt(indexFirst) == b.charAt(indexSecond)) {
+                    indexFirst++;
+                    indexSecond++;
+                    continue;
+                }
+                if (++edits > 1) {
+                    return false;
+                }
+                if (lengthFirst == lengthSecond) {
+                    indexFirst++;
+                    indexSecond++;
+                } else if (lengthFirst > lengthSecond) {
+                    indexFirst++;
+                } else {
+                    indexSecond++;
+                }
+            }
+            return edits + (lengthFirst - indexFirst) + (lengthSecond - indexSecond) <= 1;
         }
     }
 }
