@@ -13,6 +13,21 @@ import pip.ui.Ui;
 
 /** Base type for all executable commands in Pip.*/
 public abstract class Command {
+    static final String TOKEN_BY = "/by";
+    static final String TOKEN_FROM = "/from";
+    static final String TOKEN_TO = "/to";
+
+    static final String MSG_ADDED_PREFIX = "Got it. I've added this task:\n  ";
+    static final String MSG_COUNT_PREFIX = "\nNow you have ";
+    static final String MSG_COUNT_SUFFIX = " tasks in the list.";
+    static final String MSG_EMPTY_TODO = "The description of a todo cannot be empty :((";
+    static final String MSG_USAGE_DEADLINE = "Usage: deadline <desc> /by <time>";
+    static final String MSG_EMPTY_DEADLINE = "Deadline description/time cannot be empty :((";
+    static final String MSG_USAGE_EVENT = "Usage: event <desc> /from <start> /to <end>";
+    static final String MSG_EMPTY_EVENT = "Event description/times cannot be empty :((";
+    static final String MSG_EMPTY_LIST = "Your list is empty! Add some tasks first :))";
+    static final String MSG_FIND_USAGE = "Usage: find <keyword>";
+
     /**
      * Executes the command against the given model, UI, and storage.
      *
@@ -32,30 +47,46 @@ public abstract class Command {
         return false;
     }
 
+    /** Ensures text is non-empty after trim; throws with given message if empty. */
+    static String requireNonEmpty(String raw, String onEmptyMessage) throws PipException {
+        String t = raw == null ? "" : raw.trim();
+        if (t.isEmpty()) {
+            throw new PipException(onEmptyMessage);
+        }
+        return t;
+    }
+
+    /** Adds a task, persists list, and shows standard “added” UI. */
+    static void addAndPersist(Task t, TaskList tasks, Storage storage, Ui ui) throws PipException {
+        tasks.add(t);
+        storage.save(tasks.asList());
+        showAdded(t, tasks, ui);
+    }
+
+    /** Shows standardized “task added” message. */
+    static void showAdded(Task t, TaskList tasks, Ui ui) {
+        ui.show(MSG_ADDED_PREFIX + t + MSG_COUNT_PREFIX + tasks.size() + MSG_COUNT_SUFFIX);
+    }
+
+    /** Splits text by the first occurrence of token; returns {left, right} trimmed. */
+    static String[] splitOnce(String text, String token) {
+        int p = text.indexOf(token);
+        if (p < 0) {
+            return new String[] { text.trim(), "" };
+        }
+        String left = text.substring(0, p).trim();
+        String right = text.substring(p + token.length()).trim();
+        return new String[] { left, right };
+    }
+
     /** Command that adds a new Todo task to the list. */
     public static class AddTodo extends Command {
-        private final String args;
-
-        /**
-         * Constructs an AddTodo command with raw description arguments.
-         *
-         * @param args Raw description text (leading/trailing spaces allowed).
-         */
-        public AddTodo(String args) {
-            this.args = args.trim();
-        }
+        private final String desc;
+        public AddTodo(String args) { this.desc = (args == null ? "" : args).trim(); }
 
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
-            if (args.isEmpty()) {
-                throw new PipException("The description of a todo cannot be empty :((");
-            }
-
-            Task t = new Todo(args);
-            tasks.add(t);
-            storage.save(tasks.asList());
-
-            ui.show("Got it. I've added this task:\n  " + t
-                    + "\nNow you have " + tasks.size() + " tasks in the list.");
+            String d = requireNonEmpty(desc, MSG_EMPTY_TODO);
+            addAndPersist(new Todo(d), tasks, storage, ui);
         }
     }
 
@@ -64,35 +95,20 @@ public abstract class Command {
      * {@code <desc> /by <time>} (supports multiple date/time formats).
      */
     public static class AddDeadline extends Command {
-        private final String args;
-
-        /**
-         * Constructs an AddDeadline command with raw argument text.
-         *
-         * @param args Raw text containing description and /by time.
-         */
-        public AddDeadline(String args) {
-            this.args = args.trim();
-        }
+        private final String raw;
+        public AddDeadline(String args) { this.raw = args == null ? "" : args.trim(); }
 
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
-            if (!args.contains("/by")) {
-                throw new PipException("Usage: deadline <desc> /by <time>");
+            if (!raw.contains(TOKEN_BY)) {
+                throw new PipException(MSG_USAGE_DEADLINE);
             }
 
-            String[] parts = args.split("/by", 2);
-            String desc = parts[0].trim();
-            String by = parts[1].trim();
+            String[] parts = splitOnce(raw, TOKEN_BY);
+            String desc = requireNonEmpty(parts[0], MSG_EMPTY_DEADLINE);
+            String by = requireNonEmpty(parts[1], MSG_EMPTY_DEADLINE);
 
-            if (desc.isEmpty() || by.isEmpty()) {
-                throw new PipException("Deadline description/time cannot be empty :((");
-            }
             LocalDateTime dt = DateTimeParser.parseDateTimeFlexible(by);
-            Task t = new Deadline(desc, dt);
-            tasks.add(t);
-            storage.save(tasks.asList());
-            ui.show("Got it. I've added this task:\n  " + t
-                    + "\nNow you have " + tasks.size() + " tasks in the list.");
+            addAndPersist(new Deadline(desc, dt), tasks, storage, ui);
         }
     }
 
@@ -101,101 +117,69 @@ public abstract class Command {
      * {@code <desc> /from <start> /to <end>}.
      */
     public static class AddEvent extends Command {
-        private final String args;
-
-        /**
-         * Constructs an AddEvent command with raw argument text.
-         *
-         * @param args Raw text containing description, /from, and /to parts.
-         */
-        public AddEvent(String args) {
-            this.args = args.trim();
-        }
+        private final String raw;
+        public AddEvent(String args) { this.raw = args == null ? "" : args.trim(); }
 
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
-            if (!args.contains("/from") || !args.contains("/to")) {
-                throw new PipException("Usage: event <desc> /from <start> /to <end>");
+            if (!raw.contains(TOKEN_FROM) || !raw.contains(TOKEN_TO)) {
+                throw new PipException(MSG_USAGE_EVENT);
             }
-            int pFrom = args.indexOf("/from");
-            int pTo = args.indexOf("/to");
-            String desc = args.substring(0, pFrom).trim();
-            String from = args.substring(pFrom + 5, pTo).trim();
-            String to = args.substring(pTo + 3).trim();
-            if (desc.isEmpty() || from.isEmpty() || to.isEmpty()) {
-                throw new PipException("Event description/times cannot be empty :((");
-            }
-            Task t = new Event(desc, from, to);
-            tasks.add(t);
-            storage.save(tasks.asList());
-            ui.show("Got it. I've added this task:\n  " + t
-                    + "\nNow you have " + tasks.size() + " tasks in the list.");
+
+            // Split into desc | remainderAfterFrom
+            String[] beforeFrom = splitOnce(raw, TOKEN_FROM);
+            String desc = requireNonEmpty(beforeFrom[0], MSG_EMPTY_EVENT);
+
+            // Split remainder into start | end
+            String[] fromTo = splitOnce(beforeFrom[1], TOKEN_TO);
+            String start = requireNonEmpty(fromTo[0], MSG_EMPTY_EVENT);
+            String end = requireNonEmpty(fromTo[1], MSG_EMPTY_EVENT);
+
+            addAndPersist(new Event(desc, start, end), tasks, storage, ui);
         }
     }
 
     /** Command that deletes the task at a user-specified 1-based index. */
     public static class Delete extends Command {
         private final String args;
-
-        /**
-         * Constructs a Delete command.
-         *
-         * @param args Raw index string provided by the user (1-based).
-         */
-        public Delete(String args) {
-            this.args = args;
-        }
+        public Delete(String args) { this.args = args; }
 
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
             if (tasks.size() == 0) {
-                throw new PipException("Your list is empty! Add some tasks first :))");
+                throw new PipException(MSG_EMPTY_LIST);
             }
             int idx = Parser.parseIndex(args, tasks.size());
             Task removed = tasks.remove(idx);
             storage.save(tasks.asList());
             ui.show("Noted. I've removed this task:\n  " + removed
-                    + "\nNow you have " + tasks.size() + " tasks in the list.");
+                    + MSG_COUNT_PREFIX + tasks.size() + MSG_COUNT_SUFFIX);
         }
     }
 
     /** Command that marks the task at a user-specified 1-based index as done. */
     public static class Mark extends Command {
         private final String args;
-
-        /**
-         * Constructs a Mark command.
-         *
-         * @param args Raw index string provided by the user (1-based).
-         */
-        public Mark(String args) {
-            this.args = args;
-        }
+        public Mark(String args) { this.args = args; }
 
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
             int idx = Parser.parseIndex(args, tasks.size());
-            tasks.get(idx).mark();
+            Task t = tasks.get(idx);
+            t.mark();
             storage.save(tasks.asList());
-            ui.show("Nice! I've marked this task as done:\n  " + tasks.get(idx));
+            ui.show("Nice! I've marked this task as done:\n  " + t);
         }
     }
 
     /** Command that marks the task at a user-specified 1-based index as not done. */
     public static class Unmark extends Command {
         private final String args;
-
-        /**
-         * Constructs an Unmark command.
-         *
-         * @param args Raw index string provided by the user (1-based).
-         */
-        public Unmark(String args) {
-            this.args = args;
-        }
+        public Unmark(String args) { this.args = args; }
 
         @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
             int idx = Parser.parseIndex(args, tasks.size());
-            tasks.get(idx).unmark();
+            Task t = tasks.get(idx);
+            t.unmark();
             storage.save(tasks.asList());
-            ui.show("OK, I've marked this task as not done yet:\n  " + tasks.get(idx));
+            ui.show("OK, I've marked this task as not done yet:\n  " + t);
         }
     }
 

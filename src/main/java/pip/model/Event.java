@@ -31,6 +31,6 @@ public class Event extends Task {
     @Override
     public String toDataString() {
         return String.format("%s | %d | %s | %s | %s",
-                typeTag(), isDone ? 1 : 0, esc(description), esc(from), esc(to));
+                typeTag(), doneFlag(), esc(description), esc(from), esc(to));
     }
 }

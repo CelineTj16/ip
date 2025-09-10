@@ -12,6 +12,9 @@ import javafx.scene.layout.VBox;
  * Controller for the main GUI.
  */
 public class MainWindow extends AnchorPane {
+    private static final String USER_IMG_PATH = "/images/user.jpeg";
+    private static final String PIP_IMG_PATH = "/images/pip.jpg";
+
     @FXML
     private ScrollPane scrollPane;
     @FXML
@@ -22,9 +25,8 @@ public class MainWindow extends AnchorPane {
     private Button sendButton;
 
     private Pip pip;
-
-    private Image userImage = new Image(this.getClass().getResourceAsStream("/images/user.jpeg"));
-    private Image pipImage = new Image(this.getClass().getResourceAsStream("/images/pip.jpg"));
+    private Image userImage = new Image(this.getClass().getResourceAsStream(USER_IMG_PATH));
+    private Image pipImage = new Image(this.getClass().getResourceAsStream(PIP_IMG_PATH));
 
     @FXML
     public void initialize() {
@@ -49,6 +51,10 @@ public class MainWindow extends AnchorPane {
     @FXML
     private void handleUserInput() {
         String input = userInput.getText();
+
+        if (input == null || input.isBlank()) {
+            return;
+        }
         String response = pip.getResponse(input);
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),

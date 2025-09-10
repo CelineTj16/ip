@@ -23,6 +23,6 @@ public class Todo extends Task {
 
     @Override
     public String toDataString() {
-        return String.format("%s | %d | %s", typeTag(), isDone ? 1 : 0, esc(description));
+        return String.format("%s | %d | %s", typeTag(), doneFlag(), esc(description));
     }
 }
