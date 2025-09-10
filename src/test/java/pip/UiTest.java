@@ -1,33 +1,29 @@
 package pip;
 
-import pip.ui.Ui;
-import org.junit.jupiter.api.*;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import pip.ui.Ui;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UiTest {
 
     private static final String LINE = "    ____________________________________________________________";
 
     private ByteArrayOutputStream out;
-    private PrintStream originalOut;
     private Ui ui;
 
     @BeforeEach
     void setUp() {
-        originalOut = System.out;
         out = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(out, true, StandardCharsets.UTF_8));
-        ui = new Ui();
-    }
-
-    @AfterEach
-    void tearDown() {
-        System.setOut(originalOut);
+        PrintStream ps = new PrintStream(out, true, StandardCharsets.UTF_8);
+        ui = new Ui(ps); // inject stream; don't touch System.out
     }
 
     private String grab() {
@@ -43,13 +39,9 @@ class UiTest {
     }
 
     @Test
-    void showWelcome_printsGreetingWrappedByDividers() {
+    void showWelcome_printsSingleLineMessage() {
         ui.showWelcome();
-        String expected = LINE + "\n"
-                + "     Hi! I'm Pip :))\n"
-                + "     What can I do for you?\n"
-                + LINE + "\n";
-        assertEquals(expected, grab());
+        assertEquals("Hi! I'm Pip :)) What can I do for you?\n", grab());
     }
 
     @Test
