@@ -69,7 +69,7 @@ class CommandTest {
     }
 
     private String grabOut() {
-        String s = new String(out.toByteArray(), StandardCharsets.UTF_8);
+        String s = out.toString(StandardCharsets.UTF_8);
         out.reset();
         return s.replace("\r\n", "\n");
     }

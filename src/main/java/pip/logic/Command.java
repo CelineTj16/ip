@@ -26,7 +26,6 @@ public abstract class Command {
     static final String MSG_USAGE_EVENT = "Usage: event <desc> /from <start> /to <end>";
     static final String MSG_EMPTY_EVENT = "Event description/times cannot be empty :((";
     static final String MSG_EMPTY_LIST = "Your list is empty! Add some tasks first :))";
-    static final String MSG_FIND_USAGE = "Usage: find <keyword>";
 
     /**
      * Executes the command against the given model, UI, and storage.
@@ -82,9 +81,13 @@ public abstract class Command {
     /** Command that adds a new Todo task to the list. */
     public static class AddTodo extends Command {
         private final String desc;
-        public AddTodo(String args) { this.desc = (args == null ? "" : args).trim(); }
 
-        @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
+        public AddTodo(String args) {
+            this.desc = (args == null ? "" : args).trim();
+        }
+
+        @Override
+        public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
             assert tasks != null && ui != null && storage != null : "tasks, ui, and storage must be set";
             String d = requireNonEmpty(desc, MSG_EMPTY_TODO);
             addAndPersist(new Todo(d), tasks, storage, ui);
@@ -97,9 +100,13 @@ public abstract class Command {
      */
     public static class AddDeadline extends Command {
         private final String raw;
-        public AddDeadline(String args) { this.raw = args == null ? "" : args.trim(); }
 
-        @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
+        public AddDeadline(String args) {
+            this.raw = args == null ? "" : args.trim();
+        }
+
+        @Override
+        public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
             assert tasks != null && ui != null && storage != null : "tasks, ui, and storage must be set";
             if (!raw.contains(TOKEN_BY)) {
                 throw new PipException(MSG_USAGE_DEADLINE);
@@ -120,9 +127,13 @@ public abstract class Command {
      */
     public static class AddEvent extends Command {
         private final String raw;
-        public AddEvent(String args) { this.raw = args == null ? "" : args.trim(); }
 
-        @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
+        public AddEvent(String args) {
+            this.raw = args == null ? "" : args.trim();
+        }
+
+        @Override
+        public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
             assert tasks != null && ui != null && storage != null : "tasks, ui, and storage must be set";
             if (!raw.contains(TOKEN_FROM) || !raw.contains(TOKEN_TO)) {
                 throw new PipException(MSG_USAGE_EVENT);
@@ -144,9 +155,13 @@ public abstract class Command {
     /** Command that deletes the task at a user-specified 1-based index. */
     public static class Delete extends Command {
         private final String args;
-        public Delete(String args) { this.args = args; }
 
-        @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
+        public Delete(String args) {
+            this.args = args;
+        }
+
+        @Override
+        public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
             assert tasks != null && ui != null && storage != null : "tasks, ui, and storage must be set";
             if (tasks.size() == 0) {
                 throw new PipException(MSG_EMPTY_LIST);
@@ -162,9 +177,13 @@ public abstract class Command {
     /** Command that marks the task at a user-specified 1-based index as done. */
     public static class Mark extends Command {
         private final String args;
-        public Mark(String args) { this.args = args; }
 
-        @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
+        public Mark(String args) {
+            this.args = args;
+        }
+
+        @Override
+        public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
             assert tasks != null && ui != null && storage != null : "tasks, ui, and storage must be set";
             int idx = Parser.parseIndex(args, tasks.size());
             Task t = tasks.get(idx);
@@ -177,9 +196,13 @@ public abstract class Command {
     /** Command that marks the task at a user-specified 1-based index as not done. */
     public static class Unmark extends Command {
         private final String args;
-        public Unmark(String args) { this.args = args; }
 
-        @Override public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
+        public Unmark(String args) {
+            this.args = args;
+        }
+
+        @Override
+        public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
             assert tasks != null && ui != null && storage != null : "tasks, ui, and storage must be set";
             int idx = Parser.parseIndex(args, tasks.size());
             Task t = tasks.get(idx);
@@ -191,17 +214,21 @@ public abstract class Command {
 
     /** Command that lists all tasks in the current task list. */
     public static class List extends Command {
-        @Override public void execute(TaskList tasks, Ui ui, Storage storage) {
+        @Override
+        public void execute(TaskList tasks, Ui ui, Storage storage) {
             ui.show(tasks.render());
         }
     }
 
     /** Command that exits the application. */
     public static class Exit extends Command {
-        @Override public void execute(TaskList tasks, Ui ui, Storage storage) {
+        @Override
+        public void execute(TaskList tasks, Ui ui, Storage storage) {
             ui.show("Bye. Hope to see you again soon!");
         }
-        @Override public boolean isExit() {
+
+        @Override
+        public boolean isExit() {
             return true;
         }
     }
@@ -232,8 +259,7 @@ public abstract class Command {
 
             StringBuilder sb = new StringBuilder("Here are the matching tasks in your list:\n");
             int count = 0;
-            for (int i = 0; i < all.size(); i++) {
-                Task t = all.get(i);
+            for (Task t : all) {
                 if (t.getDescription().toLowerCase().contains(kw)) {
                     count++;
                     sb.append(count).append(". ").append(t).append("\n");
@@ -247,5 +273,4 @@ public abstract class Command {
             }
         }
     }
-
 }
