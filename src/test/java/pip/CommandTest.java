@@ -1,5 +1,11 @@
 package pip;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
@@ -24,8 +30,6 @@ import pip.model.Task;
 import pip.model.TaskList;
 import pip.storage.Storage;
 import pip.ui.Ui;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class CommandTest {
 
@@ -148,7 +152,7 @@ class CommandTest {
     }
 
     @Test
-    void exit_printsMessageAndSignalsExit() throws PipException {
+    void exit_printsMessageAndSignalsExit() {
         ExitApp exit = new ExitApp();
         exit.execute(tasks, ui, storage);
 
