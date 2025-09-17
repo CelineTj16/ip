@@ -35,7 +35,7 @@ public class Parser {
         case "event" -> new AddEvent(args);
         case "find" -> new FindTasks(args);
         default -> throw new PipException("I'm not sure what that means. Sorry! \n(Try: list, find, mark, "
-                + "unmark, delete, todo, deadline, event, help, bye.)");
+                + "unmark, delete, todo, deadline, event, bye.)");
         };
     }
 

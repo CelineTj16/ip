@@ -1,2 +1,6 @@
-T | 0 | 2101 ppt
-D | 0 | 2103 | 2025-12-02T23:59
+D | 0 | 2103 iP | 2025-10-20T16:00
+E | 1 | ursa welfare event | Wed 8pm | 10pm
+T | 1 | 2109 lecture
+E | 0 | mookata supper | Fri 9pm | 11pm
+D | 0 | 2103 quiz | 2025-10-21T16:00
+D | 0 | 2100 quiz | 2025-10-23T23:59
