@@ -1,26 +1,109 @@
-# Pip project template
+# Pip User Guide
 
-This is a project template for a greenfield Java project. It's named after the Java mascot _Duke_. Given below are instructions on how to use it.
+![Ui.png](Ui.png)
 
-## Setting up in Intellij
+## Getting started 🚀
+1. Download the latest JAR from GitHub Releases
+2. Open a terminal in the folder containing the JAR.
+3. Run java -jar pip.jar, then type todo CS2103T Quiz and press Enter.
 
-Prerequisites: JDK 17, update Intellij to the most recent version.
+## Why Pip
+- Fast text commands 
+- Flexible date/time parsing 
+- Fuzzy search with minor-typo tolerance 
+- Automatic save/load
+> 💡 Tip: Use find `<keywords>` to quickly filter tasks. It’s case-insensitive and tolerates small typos.
 
-1. Open Intellij (if you are not in the welcome screen, click `File` > `Close Project` to close the existing project first)
-1. Open the project into Intellij as follows:
-   1. Click `Open`.
-   1. Select the project directory, and click `OK`.
-   1. If there are any further prompts, accept the defaults.
-1. Configure the project to use **JDK 17** (not other versions) as explained in [here](https://www.jetbrains.com/help/idea/sdk.html#set-up-jdk).<br>
-   In the same dialog, set the **Project language level** field to the `SDK default` option.
-1. After that, locate the `src/main/java/Pip.java` file, right-click it, and choose `Run Pip.main()` (if the code editor is showing compile errors, try restarting the IDE). If the setup is correct, you should see something like the below as the output:
-   ```
-   Hello from
-    ____        _        
-   |  _ \ _   _| | _____ 
-   | | | | | | | |/ / _ \
-   | |_| | |_| |   <  __/
-   |____/ \__,_|_|\_\___|
-   ```
+## Quick actions (task list)
+- [x] Add a todo: `todo Make 2101 presentation slides`
+- [ ] Add a deadline: `deadline 2103 Quiz /by 2/10/2025 1600`
+- [ ] Search tasks: `find quiz`
+- [ ] Exit: `bye`
 
-**Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
+## Adding todos
+**Action & outcome:** Create a simple task. Pip confirms the add and saves automatically.<br>
+**Usage:** `todo <description>`<br>
+**Example:** `todo Make 2101 presentation slides`<br>
+**Expected outcome:**
+```java
+Got it. I've added this task:
+[T][ ] Make 2101 presentation slides
+Now you have 1 tasks in the list.
+```
+
+## Adding deadlines
+**Action & outcome:** Create a task with a due date/time. Pip parses flexible date formats, confirms the add, and saves.<br>
+**Usage:** `deadline <description> /by <date-or-datetime>`<br>
+**Example:** `deadline 2103 Quiz /by 2/10/2025 1600`<br>
+**Expected outcome:**
+```
+Got it. I've added this task:
+  [D][ ] 2103 Quiz (by: Sep 2 2025, 4:00 PM)
+Now you have 2 tasks in the list.
+```
+
+## Adding events
+**Action & outcome:** Create an event with a start and end. Pip confirms the add and saves.<br>
+**Usage:** `event <description> /from <start> /to <end>`<br>
+**Example:** `event Camp /from Mon 9am /to Wed 5pm`<br>
+**Expected outcome:**
+```
+Got it. I've added this task:
+  [E][ ] Camp (from: Mon 9am to: Wed 5pm)
+Now you have 3 tasks in the list.
+```
+
+## Listing tasks
+**Action & outcome:** Show all tasks in order. If there are none, Pip shows a message.<br>
+**Usage:** `list`<br>
+**Expected outcome:**<br>
+```
+1. [T][ ] Make 2101 presentation slides
+2. [D][ ] 2103 Quiz (by: Sep 2 2025, 4:00 PM)
+3. [E][ ] Camp (from: Mon 9am to: Wed 5pm)
+```
+
+## Finding tasks
+**Action & outcome:** Search task descriptions using one or more keywords (case-insensitive). Each term must match; minor typos (edit distance ≤ 1 per term) are tolerated.<br>
+**Usage:** `find <keyword(s)>`<br>
+**Example:** `find canp     # matches "camp" (one-character typo)`<br>
+**Expected outcome:**
+```
+Here are the matching tasks in your list:
+1. [E][ ] Camp (from: Mon 9am to: Wed 5pm)
+```
+
+## Marking task
+**Action & outcome:** Mark a task (by its list index) as done. Pip updates the task and saves.<br>
+**Usage:** `mark <index>`<br>
+**Example:** `mark 3`<br>
+**Expected outcome:**
+```
+Nice! I've marked this task as done:
+  [E][X] Camp (from: Mon 9am to: Wed 5pm)
+```
+
+## Unmarking task
+**Action & outcome:** Mark a task (by its list index) as not done. Pip updates the task and saves.<br>
+**Usage:** `unmark <index>`<br>
+**Example:** `unmark 3`<br>
+**Expected outcome:**
+```
+OK, I've marked this task as not done yet:
+  [E][ ] Camp (from: Mon 9am to: Wed 5pm)
+```
+
+## Deleting task
+**Action & outcome:** Remove a task (by its list index). Pip confirms removal and saves.<br>
+**Usage:** `delete <index>`<br>
+**Example:** `delete 3`<br>
+**Expected outcome:**
+```
+Noted. I've removed this task:
+  [E][ ] Camp (from: Mon 9am to: Wed 5pm)
+Now you have 2 tasks in the list.
+```
+
+## Exiting
+**Action & outcome:** Close Pip.<br>
+**Usage:** `bye`<br>
