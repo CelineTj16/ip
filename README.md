@@ -1,6 +1,6 @@
 # Pip User Guide
 
-![Ui.png](Ui.png)
+<img width="524" height="886" alt="Ui" src="https://github.com/user-attachments/assets/d3d3565b-540a-44fe-b28c-8583beb2f029" />
 
 ## Getting started 🚀
 1. Download the latest JAR from GitHub Releases
@@ -8,6 +8,7 @@
 3. Run java -jar pip.jar, then type todo CS2103T Quiz and press Enter.
 
 ## Why Pip
+- **Cozy [Animal Crossing](https://animalcrossing.nintendo.com/new-horizons/) vibes**
 - Fast text commands 
 - Flexible date/time parsing 
 - Fuzzy search with minor-typo tolerance 
