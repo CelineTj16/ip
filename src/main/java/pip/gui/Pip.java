@@ -22,7 +22,7 @@ public class Pip {
     private final Ui ui;
 
     private final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-    private boolean exit = false;
+    private boolean exitRequested = false;
 
     public Pip() {
         this(DEFAULT_SAVE_PATH);
@@ -54,9 +54,9 @@ public class Pip {
         try {
             Command c = Parser.parse(input);
             c.execute(tasks, ui, storage);
-            exit = c.isExit();
+            exitRequested = c.isExit();
 
-            if (exit) {
+            if (exitRequested) {
                 Platform.runLater(Platform::exit);
             }
         } catch (PipException e) {
@@ -66,6 +66,6 @@ public class Pip {
     }
 
     public boolean shouldExit() {
-        return exit;
+        return exitRequested;
     }
 }
