@@ -26,7 +26,9 @@ public abstract class Command {
     public abstract void execute(TaskList tasks, Ui ui, Storage storage) throws PipException;
 
     /** Whether the application should exit after this command completes. */
-    public boolean isExit() { return false; }
+    public boolean isExit() {
+        return false;
+    }
 
     /** Ensures text is non-empty after trim; throws with given message if empty. */
     protected static String requireNonEmpty(String raw, String onEmptyMessage) throws PipException {

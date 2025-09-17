@@ -12,7 +12,9 @@ import pip.ui.Ui;
 public class UnmarkTask extends Command {
     private final String args;
 
-    public UnmarkTask(String args) { this.args = args; }
+    public UnmarkTask(String args) {
+        this.args = args;
+    }
 
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws PipException {
