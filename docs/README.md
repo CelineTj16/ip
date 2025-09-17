@@ -2,11 +2,24 @@
 
 ![Ui.png](Ui.png)
 
-Pip is a tiny task manager you control with simple commands. It supports adding todos, deadlines, and events.
-- Fast text commands 
-- Flexible date/time parsing 
-- Fuzzy search with minor-typo tolerance 
+## Getting started 🚀
+1. Download the latest JAR from GitHub Releases
+2. Open a terminal in the folder containing the JAR.
+3. Run java -jar pip.jar, then type todo CS2103T Quiz and press Enter.
+
+## Why Pip
+- **Cozy [Animal Crossing](https://animalcrossing.nintendo.com/new-horizons/) vibes**
+- Fast text commands
+- Flexible date/time parsing
+- Fuzzy search with minor-typo tolerance
 - Automatic save/load
+> 💡 Tip: Use find `<keywords>` to quickly filter tasks. It’s case-insensitive and tolerates small typos.
+
+## Quick actions (task list)
+- [x] Add a todo: `todo Make 2101 presentation slides`
+- [ ] Add a deadline: `deadline 2103 Quiz /by 2/10/2025 1600`
+- [ ] Search tasks: `find quiz`
+- [ ] Exit: `bye`
 
 ## Adding todos
 **Action & outcome:** Create a simple task. Pip confirms the add and saves automatically.<br>

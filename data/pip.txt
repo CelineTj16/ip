@@ -5,3 +5,4 @@ E | 0 | mookata supper | Fri 9pm | 11pm
 D | 0 | 2103 quiz | 2025-10-21T16:00
 D | 0 | 2100 quiz | 2025-10-23T23:59
 D | 0 | event | 2020-10-12T19:00
+T | 0 | sth
