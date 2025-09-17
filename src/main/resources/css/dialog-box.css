@@ -46,5 +46,8 @@
 
     /* Rotate image clockwise by degrees. */
     -fx-rotate: 0;
+
+    -fx-fit-width: 50px;
+    -fx-fit-height: 50px;
 }
 
