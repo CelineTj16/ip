@@ -46,7 +46,6 @@ public class Pip {
                 isExit = c.isExit();
             } catch (PipException e) {
                 ui.showError(e.getMessage());
-            } finally {
             }
         }
         sc.close();

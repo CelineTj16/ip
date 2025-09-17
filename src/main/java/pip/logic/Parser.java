@@ -25,19 +25,18 @@ public class Parser {
         String args = parts.length > 1 ? parts[1] : "";
 
         return switch (cmd) {
-        case "bye" -> new Command.Exit();
-        case "list" -> new Command.List();
-        case "mark" -> new Command.Mark(args);
-        case "unmark" -> new Command.Unmark(args);
-        case "delete" -> new Command.Delete(args);
-        case "todo" -> new Command.AddTodo(args);
-        case "deadline" -> new Command.AddDeadline(args);
-        case "event" -> new Command.AddEvent(args);
-        case "find" -> new Command.Find(args);
-        default -> throw new PipException("I'm not sure what that means. Sorry!");
+        case "bye" -> new ExitApp();
+        case "list" -> new ListTasks();
+        case "mark" -> new MarkTask(args);
+        case "unmark" -> new UnmarkTask(args);
+        case "delete" -> new DeleteTask(args);
+        case "todo" -> new AddTodo(args);
+        case "deadline" -> new AddDeadline(args);
+        case "event" -> new AddEvent(args);
+        case "find" -> new FindTasks(args);
+        default -> throw new PipException("I'm not sure what that means. Sorry! \n(Try: list, find, mark, "
+                + "unmark, delete, todo, deadline, event, help, bye.)");
         };
-
-
     }
 
     static int parseIndex(String s, int size) throws PipException {
