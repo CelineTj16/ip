@@ -3,5 +3,5 @@ D | 0 | 2101 assignment | 2025-09-12T23:59
 E | 1 | CBGB | mon 8pm | 9pm
 T | 0 | cook pasta
 T | 0 | cook prata
-D | 0 | CS2101 quiz | 2025-11-10T19:00
+D | 1 | CS2101 quiz | 2025-11-10T19:00
 T | 0 | 2101 lecture
